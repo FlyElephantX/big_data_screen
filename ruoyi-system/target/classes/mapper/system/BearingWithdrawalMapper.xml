@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BearingWithdrawalMapper">
+    
+    <resultMap type="BearingWithdrawal" id="BearingWithdrawalResult">
+        <result property="bearingId"    column="bearing_id"    />
+        <result property="name"    column="name"    />
+        <result property="value"    column="value"    />
+        <result property="statisDate"    column="statis_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBearingWithdrawalVo">
+        select bearing_id, name, value, statis_date, create_by, create_time, update_by, update_time, remark from bearing_withdrawal
+    </sql>
+
+    <select id="selectBearingWithdrawalList" parameterType="BearingWithdrawal" resultMap="BearingWithdrawalResult">
+        <include refid="selectBearingWithdrawalVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="statisDate != null "> and statis_date = #{statisDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectBearingWithdrawalByBearingId" parameterType="Long" resultMap="BearingWithdrawalResult">
+        <include refid="selectBearingWithdrawalVo"/>
+        where bearing_id = #{bearingId}
+    </select>
+
+    <insert id="insertBearingWithdrawal" parameterType="BearingWithdrawal" useGeneratedKeys="true" keyProperty="bearingId">
+        insert into bearing_withdrawal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="value != null and value != ''">value,</if>
+            <if test="statisDate != null">statis_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="value != null and value != ''">#{value},</if>
+            <if test="statisDate != null">#{statisDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBearingWithdrawal" parameterType="BearingWithdrawal">
+        update bearing_withdrawal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="value != null and value != ''">value = #{value},</if>
+            <if test="statisDate != null">statis_date = #{statisDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where bearing_id = #{bearingId}
+    </update>
+
+    <delete id="deleteBearingWithdrawalByBearingId" parameterType="Long">
+        delete from bearing_withdrawal where bearing_id = #{bearingId}
+    </delete>
+
+    <delete id="deleteBearingWithdrawalByBearingIds" parameterType="String">
+        delete from bearing_withdrawal where bearing_id in 
+        <foreach item="bearingId" collection="array" open="(" separator="," close=")">
+            #{bearingId}
+        </foreach>
+    </delete>
+</mapper>
